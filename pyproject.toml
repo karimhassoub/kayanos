@@ -7,9 +7,8 @@ description = "Business orchestration layer for real-estate developers."
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
-dependencies = [
-    "frappe~=16.0"
-]
+dependencies = []
+
 
 [build-system]
 requires = ["flit_core >=3.4,<4"]
