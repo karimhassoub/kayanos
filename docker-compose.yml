@@ -1,0 +1,103 @@
+version: '3.8'
+
+x-backend-defaults: &backend_defaults
+  build:
+    context: .
+    target: backend
+  image: kayanos-worker:latest
+  volumes:
+    - sites:/home/frappe/frappe-bench/sites
+    - logs:/home/frappe/frappe-bench/logs
+
+services:
+  backend:
+    <<: *backend_defaults
+    environment:
+      - WORKER_CLASS=gthread
+    depends_on:
+      - db
+      - redis-cache
+      - redis-queue
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    image: kayanos-nginx:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - BACKEND=backend:8000
+      - FRAPPE_SITE_NAME_HEADER=$$host
+      - SOCKETIO=websocket:9000
+      - UPSTREAM_REAL_IP_ADDRESS=127.0.0.1
+      - UPSTREAM_REAL_IP_HEADER=X-Forwarded-For
+      - UPSTREAM_REAL_IP_RECURSIVE=off
+    volumes:
+      - sites:/var/www/html/sites
+      - logs:/var/www/html/logs
+    depends_on:
+      - backend
+      - websocket
+
+  websocket:
+    image: frappe/frappe-socketio:version-16
+    environment:
+      - REDIS_QUEUE=redis-queue:6379
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+      - logs:/home/frappe/frappe-bench/logs
+    depends_on:
+      - redis-queue
+
+  queue-default:
+    <<: *backend_defaults
+    command: ["bench", "worker", "--queue", "default"]
+    depends_on:
+      - backend
+      - redis-queue
+
+  queue-short:
+    <<: *backend_defaults
+    command: ["bench", "worker", "--queue", "short"]
+    depends_on:
+      - backend
+      - redis-queue
+
+  queue-long:
+    <<: *backend_defaults
+    command: ["bench", "worker", "--queue", "long"]
+    depends_on:
+      - backend
+      - redis-queue
+
+  scheduler:
+    <<: *backend_defaults
+    command: ["bench", "schedule"]
+    depends_on:
+      - backend
+      - redis-cache
+      - redis-queue
+
+  db:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --skip-innodb-read-only-compressed
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis-cache:
+    image: redis:6.2-alpine
+
+  redis-queue:
+    image: redis:6.2-alpine
+
+volumes:
+  sites:
+  logs:
+  db-data:
