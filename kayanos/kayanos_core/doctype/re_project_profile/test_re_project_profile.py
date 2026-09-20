@@ -126,6 +126,8 @@ class IntegrationTestREProjectProfile(IntegrationTestCase):
         self.assertRaises(LinkExistsError, frappe.delete_doc, 'Project', self.project.name)
 
     def test_12_crm_lead_deal_expose_field(self):
+        frappe.clear_cache(doctype='CRM Lead')
+        frappe.clear_cache(doctype='CRM Deal')
         meta_lead = frappe.get_meta('CRM Lead')
         meta_deal = frappe.get_meta('CRM Deal')
         self.assertTrue(meta_lead.has_field('kayanos_project'))
@@ -138,7 +140,7 @@ class IntegrationTestREProjectProfile(IntegrationTestCase):
             'kayanos_project': self.project.name
         }).insert(ignore_permissions=True)
         
-        from crm.crm.doctype.crm_lead.crm_lead import convert_to_deal
+        from crm.fcrm.doctype.crm_lead.crm_lead import convert_to_deal
         deal = convert_to_deal(lead.name)
         self.assertEqual(deal.kayanos_project, self.project.name)
 
