@@ -1,0 +1,99 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:RE-PROJ-{project}",
+ "creation": "2026-09-20 23:50:35.923071",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "operating_company",
+  "ownership_type",
+  "developer_type",
+  "external_developer",
+  "sales_authorized",
+  "construction_responsible"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "operating_company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Operating Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ownership_type",
+   "fieldtype": "Select",
+   "label": "Ownership Type",
+   "options": "Internal\nExternal",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.ownership_type==\"External\"",
+   "fieldname": "developer_type",
+   "fieldtype": "Select",
+   "label": "Developer Type",
+   "options": "\nCustomer\nSupplier\nCompany"
+  },
+  {
+   "depends_on": "eval:doc.ownership_type==\"External\"",
+   "fieldname": "external_developer",
+   "fieldtype": "Dynamic Link",
+   "label": "External Developer",
+   "options": "developer_type"
+  },
+  {
+   "default": "0",
+   "fieldname": "sales_authorized",
+   "fieldtype": "Check",
+   "label": "Sales Authorized"
+  },
+  {
+   "default": "0",
+   "fieldname": "construction_responsible",
+   "fieldtype": "Check",
+   "label": "Construction Responsible"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-20 23:50:35.923071",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Project Profile",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
