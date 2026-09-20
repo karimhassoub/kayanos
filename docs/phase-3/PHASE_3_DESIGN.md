@@ -1,108 +1,108 @@
-# KayanOS Phase 3 — Architecture Design (Real Estate Domain)
+# KayanOS Phase 3 — Updated Architecture Design
+## DESIGN DRAFT — FOR PRODUCT OWNER REVIEW
 
-## 1. Executive Summary
-This document outlines the architecture for Phase 3: Real Estate Domain in KayanOS. Based on Product Owner decisions, the model adopts a strict 4-level hierarchy: `Project → Phase → Property(Building) → Unit`. It natively protects the canonical ERPNext/BuildSuite `Project`, enforces UI-configurable real estate types, and introduces a robust "Shadow Item" synchronization to bridge the gap between KayanOS real estate attributes and ERPNext's standard selling/billing workflows.
+### 1. الهدف والنطاق
+إنشاء طبقة عقارية داخل KayanOS لإدارة مراحل ومباني ووحدات المشروعات، تدعم المطوّر الداخلي والخارجي وتكون قابلة للتوسع لشركات عقارية متعددة.
+المرحلة تشمل تعريف العقارات والوحدات، أنواعها، صلاحيات طرحها للبيع، وربط كل وحدة بـ ERPNext Item كـ Shadow Item.
+ولا تشمل دورة الحجز أو التعاقد أو الفوترة والمحاسبة الفعلية.
 
-## 2. Relationship Diagram (Mermaid)
+### 2. الهيكل المعماري
+* كل RE Phase ترتبط بمشروع ERPNext واحد.
+* كل RE Property ترتبط بمرحلة واحدة، ويُتحقق من المشروع عبر المرحلة.
+* كل RE Unit ترتبط بمبنى واحد، ويُشتق مشروعها من الـ Property والـ Phase.
+* كل وحدة لها Shadow Item واحد فقط.
+* RE Project Profile يظل ملف إعدادات المشروع، وليس بديلًا عن Project.
 
-```mermaid
-erDiagram
-    Project ||--|| RE-Project-Profile : "Extends (1-to-1)"
-    Project ||--|{ RE-Phase : "Contains (1-to-N)"
-    
-    RE-Phase {
-        string phase_name
-        link project
-        link phase_type
-    }
-    
-    RE-Phase ||--|{ RE-Property : "Contains (1-to-N)"
-    
-    RE-Property {
-        string property_name
-        link phase
-        link project
-        link property_type
-    }
-    
-    RE-Property ||--|{ RE-Unit : "Contains (1-to-N)"
-    
-    RE-Unit {
-        string unit_number
-        link property
-        link project
-        link unit_type
-        string status
-        link shadow_item
-    }
+### 3. DocType Proposal Matrix
 
-    RE-Unit ||--|| Item : "Shadow Item (1-to-1)"
+| DocType | الغرض | العلاقات الأساسية |
+| :--- | :--- | :--- |
+| **RE Phase** | تقسيم المشروع لمراحل | Project + Phase Type |
+| **RE Property** | مبنى داخل مرحلة | RE Phase + Property Type |
+| **RE Unit** | الوحدة العقارية | RE Property + Unit Type + Item |
+| **RE Phase Type** | أنواع المراحل القابلة للتهيئة | مستقل |
+| **RE Property Type** | أنواع العقارات/المباني القابلة للتهيئة | مستقل |
+| **RE Unit Type** | أنواع الوحدات القابلة للتهيئة | مستقل |
 
-    RE-Unit-Type ||--o{ RE-Unit : "Categorizes"
-    RE-Property-Type ||--o{ RE-Property : "Categorizes"
-    RE-Phase-Type ||--o{ RE-Phase : "Categorizes"
-```
+**RE Phase — حقول مقترحة:**
+* `phase_name`
+* `project` — Link → Project
+* `phase_type` — Link → RE Phase Type
+* `developer_type` — Internal / External
+* `external_developer` — Dynamic Link حسب نوع الجهة، وفق نمط Phase 2
+* `sales_authorized` — صلاحية طرح الوحدات داخل المرحلة
+* `construction_responsible` — مسؤولية التنفيذ
+* `status` — Draft / Active / Inactive
+*قاعدة الصلاحية:* لا يجوز أن تمنح المرحلة صلاحية بيع تتعارض مع `RE Project Profile.sales_authorized`. تفعيل البيع يتطلب سماح المشروع والمرحلة معًا.
 
-## 3. DocType & Field Proposal Matrix
+**RE Property — حقول مقترحة:**
+* `property_name`
+* `property_code`
+* `property_type`
+* `phase`
+* `project` — قيمة مشتقة/للعرض، غير قابلة للتعديل يدويًا
+* `status`
 
-| DocType | Role / Purpose | Key Fields | Relationships / Links |
-| :--- | :--- | :--- | :--- |
-| **RE Phase** | Logical division of a Project. | `phase_name`, `phase_type`, `status` | Links to canonical `Project`. |
-| **RE Property** | Physical building/zone within a Phase. | `property_name`, `property_type`, `status` | Links to `RE Phase` & canonical `Project` (read-only inheritance). |
-| **RE Unit** | The sellable/rentable asset. | `unit_number`, `status`, `built_up_area`, `price`, `shadow_item` | Links to `RE Property` & canonical `Project`. |
-| **RE Phase Type** | User-configurable classification. | `type_name`, `description` | Standalone Setup DocType. |
-| **RE Property Type**| User-configurable classification. | `type_name` (e.g. Building, Villa, Land) | Standalone Setup DocType. |
-| **RE Unit Type** | User-configurable classification. | `type_name`, `category` (Residential/Commercial)| Standalone Setup DocType. |
+**RE Unit — حقول مقترحة:**
+* `unit_number`
+* `property`
+* `project` — مشتق من التسلسل الهرمي
+* `unit_type`
+* `lifecycle_status`
+* `availability_status`
+* `built_up_area`
+* `price` — بيانات تجارية في KayanOS، دون مزامنة مع Item في هذه المرحلة
+* `shadow_item` — Link → Item، فريد وغير قابل للتغيير بعد الربط
+* `amenities / included_components` — لتمثيل الجراج والمخزن ومكونات الوحدة، دون إنشاء وحدات مستقلة
 
-**Consistency Inheritance:** 
-A Unit's canonical `Project` is strictly derived and locked based on its parent `RE Property`. Changing a Property's Phase/Project cascades dynamically or is prevented if units exist.
+### 4. صلاحيات المطوّر والبيع على مستوى المرحلة
+كل مرحلة تقدر تعرّف المطوّر المسؤول عنها، وتحدد هل البيع مصرح به في المرحلة دي أم لا. لكن `RE Project Profile` يظل الحد الأعلى للصلاحية.
+اختلاف المطوّر أو صلاحية البيع بين Phase 1 وPhase 2 ممكن، مع بقاء المشروع الأصلي واحدًا. أما صلاحيات المستخدمين داخل Frappe، فهي منفصلة عن صلاحية البيع التجارية.
 
-## 4. Unit Lifecycle and Availability
+### 5. دورة حياة الوحدة
+نفصل حالة السجل عن حالة التوافر التجاري:
+* `lifecycle_status`: Draft / Active / Inactive
+* `availability_status`: Not Released / Available / Withheld / Reserved / Sold
 
-The `RE Unit` handles lifecycle logic strictly isolated from the Shadow Item:
+`Available` تتطلب أن يكون السجل `Active` وأن تكون صلاحية البيع متحققة على مستوى المشروع والمرحلة.
+لو اتسحبت صلاحية البيع، يمنع طرح وحدات جديدة. أما الوحدات المطروحة بالفعل، فيجب تحديد سياسة التعامل معها.
 
-1. **Draft:** Unit is being created/configured. Not available for sale.
-2. **Available:** Unit is released. *Validation Rule:* A unit can ONLY become Available if the `RE Project Profile` has `sales_authorized = 1`. If authorization is revoked, Available units transition to `Withheld` or block new bookings.
-3. **Reserved:** Blocked temporarily by an active lead/opportunity (Future Phase).
-4. **Sold:** Transaction completed (Future Phase).
-5. **Withheld / Blocked:** Manually removed from inventory.
+### 6. Shadow Item Lifecycle
+* كل RE Unit ترتبط بـ ERPNext Item واحد، ويكون الربط إلزاميًا بعد اكتمال الإنشاء.
+* إنشاء Item تلقائيًا عند إنشاء الوحدة، وفق آلية ذرّية تُختبر فعليًا.
+* Item Code فريد، ويُولّد من هوية الوحدة الثابتة.
+* لا يتم إنشاء Item مكرر عند إعادة محاولة العملية.
+* لا تتم مزامنة السعر في Phase 3.
+* لا يُستخدم Item لتخزين كل تفاصيل الوحدة العقارية.
+* لا يُسمح بحذف RE Unit بعد إنشاء Shadow Item؛ يتم استخدام الأرشفة/التعطيل.
+* لا يُحذف Shadow Item تلقائيًا، ولا يُعاد ربط الوحدة بـ Item آخر.
 
-## 5. Shadow Item Lifecycle
+### 7. الأنواع القابلة للتهيئة من داخل البرنامج
+استخدام Setup DocTypes مستقلة للأنواع (Phase Type, Property Type, Unit Type).
+إضافة نوع جديد لا تتطلب تعديل كود، ولا يُحذف النوع المستخدم بطريقة تكسر البيانات.
 
-Every `RE Unit` will possess a 1-to-1 ERPNext `Item` (Shadow Item) to enable future standard selling/invoicing modules without polluting KayanOS attributes.
+### 8. قواعد سلامة البيانات
+* المشروع المعروض على Property وUnit يُشتق من العلاقة الأعلى.
+* لا يسمح بتكرار رقم الوحدة داخل نفس المبنى.
+* يجب أن يكون لكل وحدة Shadow Item واحد.
+* يمنع حذف Phase أو Property أو Unit عند وجود سجلات مرتبطة بها.
+* تعطيل Phase لا ينبغي أن يؤدي إلى تعطيل أبنائها بشكل غير قابل للعكس.
 
-* **Creation Timing:** Handled in the `after_insert` hook of the `RE Unit`.
-* **Atomicity / Failure Handling:** If creating the `Item` fails (e.g., due to downstream ERPNext validation errors), the transaction is rolled back via Frappe's DB transaction manager, preventing orphaned RE Units.
-* **Uniqueness:** The Item Code will match the RE Unit's name (e.g., `PROJ-PH1-BLDG1-U01`). Duplicate items are natively prevented by Frappe's primary key constraints on the `Item` doctype.
-* **Item Properties:** Created as a non-stock item (`is_stock_item = 0`), disabled if the RE Unit is in `Draft` or `Withheld` status. 
+### 9. Scenario Coverage
+* **مطوّر داخلي / خارجي:** إعدادات المرحلة تدعم ذلك.
+* **مقاول إنشاءات خارجي:** مسؤولية الإنشاء منفصلة.
+* **مراحل ومبانٍ ووحدات متعددة:** هيكل هرمي ثابت.
+* **جراج أو مخزن تابع للشقة:** مكونات داخل الوحدة وليس RE Unit مستقلًا.
 
-## 6. Scenario Coverage Matrix
+### 10. نطاق التنفيذ المقترح لـ Phase 3
+* إنشاء Setup DocTypes للأنواع.
+* إنشاء RE Phase وRE Property وRE Unit.
+* تطبيق علاقات المشروع والتسلسل الهرمي.
+* إنشاء Shadow Item وربطه بالوحدة.
+* تطبيق منع الحذف والأرشفة وقواعد عدم التكرار.
+* كتابة Integration Tests.
 
-| Scenario | Model Behavior |
-| :--- | :--- |
-| **Internal Developer (Own Project)** | Profile = Internal. Phase/Property/Unit created under the canonical Project. Sales authorized internally. |
-| **External Developer (Brokered)** | Profile = External. Units are created and Shadow Items generated. Sales revenues can later map to broker commission accounts. |
-| **3rd-Party Construction** | KayanOS Unit models do not conflict with BuildSuite BOQs. Both link back to the canonical Project seamlessly. |
-| **Mixed Responsibility** | Handled at the Profile level. If specific phases have different external developers, this requires a design decision (see Unresolved Decisions). |
-
-## 7. Data Integrity, Naming & Archival protections
-
-* **Naming Rule:** Unit name generated via expression: `{project}-{phase}-{property}-{unit_number}`. Guarantees global uniqueness.
-* **Deletion Protection:** `LinkExistsError` natively protects Phases and Properties from deletion if child Units exist.
-* **Archival:** Archiving a Phase propagates a 'Disabled' state to all child Properties, Units, and Shadow Items.
-* **Shadow Item sync:** Updating the Unit's name or price will trigger an `on_update` hook to sync essential fields to the Shadow Item.
-
-## 8. Risks and Unresolved Decisions
-
-1. **[OPEN DECISION]** **Shadow Item Deletion:** If a user deletes an `RE Unit` (assuming no bookings exist), should KayanOS automatically delete the Shadow `Item`, or just set it to `Disabled`? (Deleting items is risky if standard ERPNext logs referenced it).
-2. **[OPEN DECISION]** **Phase-Level Ownership:** Currently, `ownership_type` and `sales_authorized` sit on the `RE Project Profile` (Project-level). If a mixed project has Phase 1 (Internal) and Phase 2 (External), should `RE Phase` override or contain its own authorization flags?
-3. **[OPEN DECISION]** **Sub-Units:** Does the business require attaching sub-units (e.g., parking spots, storage) to a primary unit, or are they treated as independent `RE Units`?
-
-## 9. Proposed Bounded Phase 3 Implementation Scope
-
-1. Create Configuration DocTypes (`RE Phase Type`, `RE Property Type`, `RE Unit Type`).
-2. Create Hierarchy DocTypes (`RE Phase`, `RE Property`, `RE Unit`).
-3. Implement `after_insert` and `on_update` lifecycle hooks in `RE Unit` for Shadow Item synchronization.
-4. Implement Validation hooks (Project inheritance, checking Profile's `sales_authorized`).
-5. Write full integration test suite verifying hierarchy locks, shadow item atomicity, and rollback on failure.
-6. **Out of Scope:** Bookings, Contracts, Accounting, portal views, commission routing.
+### 11. نقاط تحتاج حسم قبل التنفيذ
+1. **تغيير صلاحية البيع:** سياسة التعامل مع الوحدات المتاحة عند سحب التصريح.
+2. **تغيير المطوّر:** هل يُسمح بتغيير المطوّر بعد إنشاء الوحدات؟
+3. **مكونات الوحدة:** طريقة تمثيل الجراج والمخزن (Child Table أم حقول نصية).
