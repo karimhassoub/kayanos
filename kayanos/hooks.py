@@ -12,3 +12,18 @@ app_license = "mit"
 website_route_rules = [
 	{"from_route": "/kayanos/<path:app_path>", "to_route": "kayanos"},
 ]
+
+# Fixtures for exporting standard settings/roles
+fixtures = [
+	{"dt": "Workspace", "filters": [["module", "=", "KayanOS Core"]]}
+]
+
+# Upgrade-safe Custom Fields injection
+custom_fields = {
+	"CRM Lead": [
+		{"fieldname": "kayanos_project", "fieldtype": "Link", "label": "KayanOS Project", "options": "Project", "insert_after": "status"},
+	],
+	"CRM Deal": [
+		{"fieldname": "kayanos_project", "fieldtype": "Link", "label": "KayanOS Project", "options": "Project", "insert_after": "status"},
+	]
+}

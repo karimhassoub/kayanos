@@ -1,0 +1,21 @@
+{
+ "creation": "2023-01-01 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "icon": "home",
+ "is_hidden": 0,
+ "is_standard": 1,
+ "label": "KayanOS Home",
+ "module": "KayanOS Core",
+ "name": "KayanOS Home",
+ "public": 1,
+ "sequence_id": 1.0,
+ "title": "KayanOS Home",
+ "type": "Workspace",
+ "content": "[{\"id\":\"header\",\"type\":\"header\",\"data\":{\"text\":\"KayanOS Dashboard\",\"level\":2}}]",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ]
+}
