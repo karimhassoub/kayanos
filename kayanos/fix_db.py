@@ -1,7 +1,15 @@
 import frappe
+from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+
 def execute():
-    try:
-        from crm.fcrm.doctype.crm_lead.crm_lead import convert_to_deal
-        print('Import successful from crm.fcrm.doctype')
-    except Exception as e:
-        print('Error:', e)
+    custom_fields = {
+        'CRM Lead': [
+            {'fieldname': 'kayanos_project', 'fieldtype': 'Link', 'label': 'KayanOS Project', 'options': 'Project', 'insert_after': 'status'}
+        ],
+        'CRM Deal': [
+            {'fieldname': 'kayanos_project', 'fieldtype': 'Link', 'label': 'KayanOS Project', 'options': 'Project', 'insert_after': 'status'}
+        ]
+    }
+    create_custom_fields(custom_fields)
+    frappe.db.commit()
+    print('Created custom fields manually')

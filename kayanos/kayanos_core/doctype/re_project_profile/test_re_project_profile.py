@@ -141,6 +141,12 @@ class IntegrationTestREProjectProfile(IntegrationTestCase):
         }).insert(ignore_permissions=True)
         
         from crm.fcrm.doctype.crm_lead.crm_lead import convert_to_deal
-        deal = convert_to_deal(lead.name)
+        deal_res = convert_to_deal(lead.name)
+        
+        if isinstance(deal_res, str):
+            deal = frappe.get_doc('CRM Deal', deal_res)
+        else:
+            deal = deal_res
+            
         self.assertEqual(deal.kayanos_project, self.project.name)
 
