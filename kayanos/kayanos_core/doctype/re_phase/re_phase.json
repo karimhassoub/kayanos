@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:{project}-{phase_name}",
+ "creation": "2026-09-21 00:15:31.303781",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "phase_name",
+  "project",
+  "phase_type",
+  "status",
+  "developer_type",
+  "external_developer_type",
+  "external_developer",
+  "sales_authorized",
+  "construction_responsible"
+ ],
+ "fields": [
+  {
+   "fieldname": "phase_name",
+   "fieldtype": "Data",
+   "label": "Phase Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phase_type",
+   "fieldtype": "Link",
+   "label": "Phase Type",
+   "options": "RE Phase Type"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nActive\nInactive"
+  },
+  {
+   "default": "Internal",
+   "fieldname": "developer_type",
+   "fieldtype": "Select",
+   "label": "Developer Type",
+   "options": "Internal\nExternal"
+  },
+  {
+   "depends_on": "eval:doc.developer_type==\"External\"",
+   "fieldname": "external_developer_type",
+   "fieldtype": "Select",
+   "label": "External Developer Type",
+   "options": "\nCustomer\nSupplier\nCompany"
+  },
+  {
+   "depends_on": "eval:doc.developer_type==\"External\"",
+   "fieldname": "external_developer",
+   "fieldtype": "Dynamic Link",
+   "label": "External Developer",
+   "options": "external_developer_type"
+  },
+  {
+   "default": "0",
+   "fieldname": "sales_authorized",
+   "fieldtype": "Check",
+   "label": "Sales Authorized"
+  },
+  {
+   "fieldname": "construction_responsible",
+   "fieldtype": "Data",
+   "label": "Construction Responsible"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-21 00:15:31.303781",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Phase",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

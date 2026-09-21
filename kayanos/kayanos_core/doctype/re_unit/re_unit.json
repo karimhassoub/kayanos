@@ -1,0 +1,120 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:{property}-{unit_number}",
+ "creation": "2026-09-21 00:15:32.207468",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "unit_number",
+  "property",
+  "project",
+  "unit_type",
+  "lifecycle_status",
+  "availability_status",
+  "built_up_area",
+  "price",
+  "shadow_item",
+  "included_components"
+ ],
+ "fields": [
+  {
+   "fieldname": "unit_number",
+   "fieldtype": "Data",
+   "label": "Unit Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Property",
+   "options": "RE Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unit_type",
+   "fieldtype": "Link",
+   "label": "Unit Type",
+   "options": "RE Unit Type"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "lifecycle_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Lifecycle Status",
+   "options": "Draft\nActive\nInactive"
+  },
+  {
+   "default": "Not Released",
+   "fieldname": "availability_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Availability Status",
+   "options": "Not Released\nAvailable\nWithheld\nReserved\nSold"
+  },
+  {
+   "fieldname": "built_up_area",
+   "fieldtype": "Float",
+   "label": "Built Up Area"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price"
+  },
+  {
+   "fieldname": "shadow_item",
+   "fieldtype": "Link",
+   "label": "Shadow Item",
+   "options": "Item",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "included_components",
+   "fieldtype": "Table",
+   "label": "Included Components",
+   "options": "RE Unit Component"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-21 00:15:32.207468",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Unit",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
