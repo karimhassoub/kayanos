@@ -26,12 +26,12 @@ def validate_payment_plan(installments, total_amount):
     sum_percentage = 0.0
     
     for row in installments:
-        percentage = flt(row.get("percentage"), 2)
+        percentage = flt(row.get("percentage"), 6)
         if percentage <= 0:
             frappe.throw(_("Installment percentage must be strictly greater than zero."))
         sum_percentage += percentage
 
-    if abs(sum_percentage - 100.0) > 0.01:
+    if abs(sum_percentage - 100.0) > 0.001:
         frappe.throw(_("Total installments percentage ({0}%) must equal exactly 100%.").format(sum_percentage))
         
     # Calculate amounts and distribute rounding difference to the last installment

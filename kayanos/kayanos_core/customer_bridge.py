@@ -62,6 +62,13 @@ def get_or_create_customer(crm_deal_name):
             deal.db_set("erpnext_customer", customer.name)
             
         return customer.name
+    except frappe.exceptions.DuplicateEntryError:
+        # Concurrent loser hit the unique constraint because of MariaDB Repeatable Read snapshot.
+        frappe.db.rollback()
+        return customer_name
     except Exception as e:
+        if frappe.db.is_duplicate_entry(e):
+            frappe.db.rollback()
+            return customer_name
         frappe.db.rollback()
         raise e

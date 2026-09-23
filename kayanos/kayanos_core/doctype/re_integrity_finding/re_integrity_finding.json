@@ -1,0 +1,144 @@
+{
+ "actions": [],
+ "autoname": "format:INT-FIND-{YYYY}-{MM}-{####}",
+ "creation": "2026-09-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "finding_signature",
+  "severity",
+  "finding_type",
+  "status",
+  "reference_section",
+  "reference_document_type",
+  "reference_document_name",
+  "comparison_section",
+  "expected_value",
+  "actual_value",
+  "resolution_section",
+  "assigned_to",
+  "resolution_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "finding_signature",
+   "fieldtype": "Data",
+   "label": "Finding Signature",
+   "read_only": 1,
+   "unique": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "severity",
+   "fieldtype": "Select",
+   "label": "Severity",
+   "options": "Informational\nWarning\nCritical",
+   "reqd": 1
+  },
+  {
+   "fieldname": "finding_type",
+   "fieldtype": "Select",
+   "label": "Finding Type",
+   "options": "Missing Invoice\nAmount Mismatch\nCurrency Mismatch\nUnmanaged Cancellation\nOrphan Invoice\nOrphan Billing Event\nOrphan Payment Schedule\nState Mismatch",
+   "reqd": 1
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nInvestigating\nResolved\nAccepted/Expected",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_section",
+   "fieldtype": "Section Break",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "reference_document_type",
+   "fieldtype": "Data",
+   "label": "Reference Document Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference_document_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Document Name",
+   "options": "reference_document_type",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "comparison_section",
+   "fieldtype": "Section Break",
+   "label": "Comparison"
+  },
+  {
+   "fieldname": "expected_value",
+   "fieldtype": "Small Text",
+   "label": "Expected Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_value",
+   "fieldtype": "Small Text",
+   "label": "Actual Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolution_section",
+   "fieldtype": "Section Break",
+   "label": "Resolution"
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "options": "User"
+  },
+  {
+   "fieldname": "resolution_notes",
+   "fieldtype": "Text",
+   "label": "Resolution Notes"
+  }
+ ],
+ "links": [],
+ "modified": "2026-09-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Integrity Finding",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate User"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

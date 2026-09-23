@@ -1,0 +1,323 @@
+{
+ "actions": [],
+ "autoname": "format:BE-{sales_agreement}-{###}",
+ "creation": "2026-09-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "commercial_context_section",
+  "sales_agreement",
+  "payment_schedule",
+  "customer",
+  "unit",
+  "company",
+  "currency",
+  "billing_amount",
+  "event_details_section",
+  "trigger_type",
+  "status",
+  "idempotency_key",
+  "integration_section",
+  "erpnext_document_type",
+  "erpnext_invoice_ref",
+  "returns_section",
+  "settlement_status",
+  "returned_amount",
+  "returns",
+  "collection_section",
+  "gross_invoiced_amount",
+  "cash_allocated",
+  "adjustment_allocated",
+  "projected_balance",
+  "erpnext_outstanding",
+  "collection_status",
+  "financial_review_section",
+  "financial_review_status",
+  "financial_review_resolution_reason",
+  "financial_review_explanation",
+  "financial_review_resolved_by",
+  "financial_review_resolved_on"
+ ],
+ "fields": [
+  {
+   "fieldname": "commercial_context_section",
+   "fieldtype": "Section Break",
+   "label": "Commercial Context"
+  },
+  {
+   "fieldname": "sales_agreement",
+   "fieldtype": "Link",
+   "label": "Sales Agreement",
+   "options": "RE Sales Agreement",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "payment_schedule",
+   "fieldtype": "Link",
+   "label": "Payment Schedule",
+   "options": "RE Payment Schedule",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fetch_from": "sales_agreement.customer",
+   "fieldname": "customer",
+   "fieldtype": "Read Only",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "sales_agreement.unit",
+   "fieldname": "unit",
+   "fieldtype": "Read Only",
+   "label": "Unit",
+   "options": "RE Unit"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Read Only",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fetch_from": "sales_agreement.currency",
+   "fieldname": "currency",
+   "fieldtype": "Read Only",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "billing_amount",
+   "fieldtype": "Currency",
+   "label": "Billing Amount",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "event_details_section",
+   "fieldtype": "Section Break",
+   "label": "Event Details"
+  },
+  {
+   "fieldname": "trigger_type",
+   "fieldtype": "Select",
+   "label": "Trigger Type",
+   "options": "On Due Date\nOn Collection\nManual",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nInvoiced\nCancelled\nFailed",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "fieldtype": "Data",
+   "label": "Idempotency Key",
+   "read_only": 1,
+   "unique": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "integration_section",
+   "fieldtype": "Section Break",
+   "label": "External Integration"
+  },
+  {
+   "fieldname": "erpnext_document_type",
+   "fieldtype": "Data",
+   "label": "ERPNext Document Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "erpnext_invoice_ref",
+   "fieldtype": "Data",
+   "label": "ERPNext Invoice Reference",
+   "read_only": 1
+  },
+  {
+   "fieldname": "returns_section",
+   "fieldtype": "Section Break",
+   "label": "Returns & Settlement"
+  },
+  {
+   "default": "Unsettled",
+   "fieldname": "settlement_status",
+   "fieldtype": "Select",
+   "label": "Settlement Status",
+   "options": "Unsettled\nPartially Returned\nFully Returned",
+   "read_only": 1
+  },
+  {
+   "fieldname": "returned_amount",
+   "fieldtype": "Currency",
+   "label": "Returned Amount",
+   "options": "currency",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "returns",
+   "fieldtype": "Table",
+   "label": "Returns",
+   "options": "RE Billing Event Return",
+   "read_only": 1
+  },
+  {
+   "fieldname": "collection_section",
+   "fieldtype": "Section Break",
+   "label": "Collections & Adjustments"
+  },
+  {
+   "fieldname": "gross_invoiced_amount",
+   "fieldtype": "Currency",
+   "label": "Gross Invoiced Amount",
+   "options": "currency",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "cash_allocated",
+   "fieldtype": "Currency",
+   "label": "Cash Allocated",
+   "options": "currency",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "adjustment_allocated",
+   "fieldtype": "Currency",
+   "label": "Adjustment Allocated",
+   "options": "currency",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "projected_balance",
+   "fieldtype": "Currency",
+   "label": "Projected Balance",
+   "options": "currency",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "fieldname": "erpnext_outstanding",
+   "fieldtype": "Currency",
+   "label": "ERPNext Outstanding",
+   "options": "currency",
+   "read_only": 1,
+   "default": "0"
+  },
+  {
+   "default": "Unpaid",
+   "fieldname": "collection_status",
+   "fieldtype": "Select",
+   "label": "Collection Status",
+   "options": "Unpaid\nPartially Settled\nFully Settled\nFully Returned\nOver-Settled (Credit)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "financial_review_section",
+   "fieldtype": "Section Break",
+   "label": "Financial Review"
+  },
+  {
+   "default": "Not Required",
+   "fieldname": "financial_review_status",
+   "fieldtype": "Select",
+   "label": "Financial Review Status",
+   "options": "Not Required\nPending Review\nResolved",
+   "read_only": 1
+  },
+  {
+   "fieldname": "financial_review_resolution_reason",
+   "fieldtype": "Select",
+   "label": "Resolution Reason",
+   "options": "\nRefund Issued\nPenalty Retained\nNatively Voided\nOther",
+   "read_only": 1,
+   "depends_on": "eval:doc.financial_review_status == 'Resolved'"
+  },
+  {
+   "fieldname": "financial_review_explanation",
+   "fieldtype": "Small Text",
+   "label": "Explanation",
+   "read_only": 1,
+   "depends_on": "eval:doc.financial_review_status == 'Resolved'"
+  },
+  {
+   "fieldname": "financial_review_resolved_by",
+   "fieldtype": "Data",
+   "label": "Resolved By",
+   "read_only": 1,
+   "depends_on": "eval:doc.financial_review_status == 'Resolved'"
+  },
+  {
+   "fieldname": "financial_review_resolved_on",
+   "fieldtype": "Datetime",
+   "label": "Resolved On",
+   "read_only": 1,
+   "depends_on": "eval:doc.financial_review_status == 'Resolved'"
+  }
+ ],
+ "links": [],
+ "modified": "2026-09-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Billing Event",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Real Estate User"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "title": "Pending"
+  },
+  {
+   "color": "Green",
+   "title": "Invoiced"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  },
+  {
+   "color": "Orange",
+   "title": "Failed"
+  }
+ ],
+ "track_changes": 1
+}

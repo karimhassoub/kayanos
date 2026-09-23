@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "autoname": "format:BP-{project}-{company}-{###}",
+ "creation": "2026-09-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "policy_name",
+  "enabled",
+  "trigger_type",
+  "company",
+  "project"
+ ],
+ "fields": [
+  {
+   "fieldname": "policy_name",
+   "fieldtype": "Data",
+   "label": "Policy Name",
+   "reqd": 1,
+   "unique": 0
+  },
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "trigger_type",
+   "fieldtype": "Select",
+   "label": "Trigger Type",
+   "options": "On Due Date\nOn Collection\nManual",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  }
+ ],
+ "links": [],
+ "modified": "2026-09-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Billing Policy",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Real Estate User"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

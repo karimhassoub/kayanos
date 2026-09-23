@@ -183,6 +183,21 @@ class RESalesAgreement(Document):
             sch.flags.ignore_permissions = True
             sch.save(ignore_permissions=True)
             
+        # Flag Invoiced Billing Events for Financial Review
+        all_schedules = frappe.get_all("RE Payment Schedule", filters={"sales_agreement": self.name}, pluck="name")
+        if all_schedules:
+            invoiced_events = frappe.get_all(
+                "RE Billing Event", 
+                filters={
+                    "payment_schedule": ["in", all_schedules],
+                    "status": "Invoiced",
+                    "financial_review_status": ["!=", "Resolved"]
+                }, 
+                pluck="name"
+            )
+            for event_name in invoiced_events:
+                frappe.db.set_value("RE Billing Event", event_name, "financial_review_status", "Pending Review")
+            
     def mark_crm_deal_lost(self):
         if not self.crm_deal:
             return
