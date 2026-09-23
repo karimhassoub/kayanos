@@ -52,7 +52,7 @@ class RESalesAgreement(Document):
     def confirm_agreement(self):
         roles = frappe.get_roles(frappe.session.user)
         if "Sales Manager" not in roles and "System Manager" not in roles:
-            frappe.throw(_("Only Sales Manager or System Manager can confirm an Agreement."))
+            raise frappe.PermissionError(_("Only Sales Manager or System Manager can confirm an Agreement."))
             
         frappe.db.get_value("RE Unit Reservation", self.reservation, "name", for_update=True)
         frappe.db.get_value("RE Unit", self.unit, "name", for_update=True)
@@ -98,12 +98,19 @@ class RESalesAgreement(Document):
         unit.save(ignore_permissions=True)
         
         self.generate_payment_schedule()
+        
+        # Queue Email Notification (Model A)
+        frappe.enqueue(
+            "kayanos.kayanos_core.notifications.send_agreement_confirmation",
+            agreement_name=self.name,
+            enqueue_after_commit=True
+        )
 
     @frappe.whitelist()
     def cancel_draft_agreement(self):
         roles = frappe.get_roles(frappe.session.user)
         if "Sales Manager" not in roles and "System Manager" not in roles:
-            frappe.throw(_("Only Sales Manager or System Manager can cancel an Agreement."))
+            raise frappe.PermissionError(_("Only Sales Manager or System Manager can cancel an Agreement."))
             
         self.reload()
         if self.status != "Draft":
@@ -115,7 +122,8 @@ class RESalesAgreement(Document):
     def cancel_confirmed_agreement(self):
         roles = frappe.get_roles(frappe.session.user)
         if "Sales Manager" not in roles and "System Manager" not in roles:
-            frappe.throw(_("Only Sales Manager or System Manager can cancel an Agreement."))
+            raise frappe.PermissionError(_("Only Sales Manager or System Manager can cancel an Agreement."))
+
             
         frappe.db.get_value("RE Unit Reservation", self.reservation, "name", for_update=True)
         frappe.db.get_value("RE Unit", self.unit, "name", for_update=True)

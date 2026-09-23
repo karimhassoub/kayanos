@@ -9,6 +9,8 @@ def register_return_invoice(billing_event_name, return_invoice_ref):
     """
     Registers a submitted ERPNext Return Sales Invoice against an Invoiced Billing Event.
     """
+    if not frappe.has_permission("RE Billing Event", "write", doc=billing_event_name):
+        raise frappe.PermissionError(_("You do not have permission to modify this Billing Event."))
     # 1. Lock the Billing Event
     frappe.db.get_value("RE Billing Event", billing_event_name, "name", for_update=True)
     event = frappe.get_doc("RE Billing Event", billing_event_name)
@@ -86,6 +88,8 @@ def resolve_financial_review(billing_event_name, reason, explanation=None):
     """
     Auditable resolution of a pending financial review.
     """
+    if not frappe.has_permission("RE Billing Event", "write", doc=billing_event_name):
+        raise frappe.PermissionError(_("You do not have permission to modify this Billing Event."))
     frappe.db.get_value("RE Billing Event", billing_event_name, "name", for_update=True)
     event = frappe.get_doc("RE Billing Event", billing_event_name)
     
@@ -112,6 +116,8 @@ def void_unpaid_billing_event(billing_event_name):
     """
     Natively cancels an unpaid ERPNext Sales Invoice and marks Billing Event as Cancelled.
     """
+    if not frappe.has_permission("RE Billing Event", "write", doc=billing_event_name):
+        raise frappe.PermissionError(_("You do not have permission to modify this Billing Event."))
     frappe.db.get_value("RE Billing Event", billing_event_name, "name", for_update=True)
     event = frappe.get_doc("RE Billing Event", billing_event_name)
     
@@ -161,6 +167,8 @@ def sync_returns(billing_event_name):
     Iterates over registered returns. Removes any that have been cancelled in ERPNext.
     Recalculates totals.
     """
+    if not frappe.has_permission("RE Billing Event", "write", doc=billing_event_name):
+        raise frappe.PermissionError(_("You do not have permission to modify this Billing Event."))
     frappe.db.get_value("RE Billing Event", billing_event_name, "name", for_update=True)
     event = frappe.get_doc("RE Billing Event", billing_event_name)
     

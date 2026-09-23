@@ -162,6 +162,8 @@ def run_daily_integrity_audit(targeted_doc_name=None):
 
 @frappe.whitelist()
 def run_integrity_audit(reference_type=None, reference_name=None):
+    if not frappe.has_permission("RE Integrity Finding", "write"):
+        raise frappe.PermissionError("You do not have permission to run integrity audits.")
     if reference_name:
         frappe.enqueue("kayanos.kayanos_core.financial_reconciliation.run_daily_integrity_audit", targeted_doc_name=reference_name, queue="long")
         return f"Audit queued for {reference_name}."

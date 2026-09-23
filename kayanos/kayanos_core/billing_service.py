@@ -50,6 +50,8 @@ def get_or_create_billing_event(sales_agreement, payment_schedule, trigger_type)
     Idempotent API to create or retrieve a Billing Event.
     Never creates ERPNext documents.
     """
+    if not frappe.has_permission("RE Billing Event", "write"):
+        raise frappe.PermissionError(_("You do not have permission to manage Billing Events."))
     # 1. Deterministic Idempotency Key
     idempotency_key = f"{sales_agreement}-{payment_schedule}-{trigger_type}"
     

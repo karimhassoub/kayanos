@@ -10,6 +10,8 @@ def create_sales_invoice_from_billing_event(billing_event_name):
     Phase 5I-B: ERPNext Invoice Integration (Real Estate Sales Billing ONLY)
     Creates a Sales Invoice from a Pending RE Billing Event.
     """
+    if not frappe.has_permission("RE Billing Event", "write", doc=billing_event_name):
+        raise frappe.PermissionError(_("You do not have permission to modify this Billing Event."))
     # 1. Lock the Billing Event to prevent concurrent creation
     frappe.db.get_value("RE Billing Event", billing_event_name, "name", for_update=True)
     event = frappe.get_doc("RE Billing Event", billing_event_name)
@@ -101,5 +103,12 @@ def create_sales_invoice_from_billing_event(billing_event_name):
     event.db_set("erpnext_document_type", "Sales Invoice")
     event.db_set("erpnext_invoice_ref", si.name)
     event.db_set("status", "Invoiced")
+    
+    # Queue Email Notification (Model A)
+    frappe.enqueue(
+        "kayanos.kayanos_core.notifications.send_billing_invoiced",
+        billing_event_name=billing_event_name,
+        enqueue_after_commit=True
+    )
     
     return si.name
