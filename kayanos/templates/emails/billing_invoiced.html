@@ -1,0 +1,15 @@
+<div style="font-family: Arial, sans-serif; color: #333;">
+    <h2 style="color: #2c3e50;">Installment Invoiced</h2>
+    <p>Dear <strong>{{ customer_name }}</strong>,</p>
+    <p>This is a notification that a new invoice has been generated for your upcoming installment.</p>
+    
+    <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #17a2b8; margin: 20px 0;">
+        <p style="margin: 0;"><strong>Invoice Ref:</strong> {{ invoice_ref }}</p>
+        <p style="margin: 5px 0 0 0;"><strong>Amount Due:</strong> {{ billed_amount }}</p>
+        <p style="margin: 5px 0 0 0;"><strong>Unit:</strong> {{ unit }}</p>
+    </div>
+    
+    <p>You can view and process the payment via your preferred channel.</p>
+    <br>
+    <p>Thank you for choosing Kayan.</p>
+</div>
