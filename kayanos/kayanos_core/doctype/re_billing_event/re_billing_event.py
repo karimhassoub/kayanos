@@ -20,13 +20,27 @@ class REBillingEvent(Document):
         if agreement.status != "Confirmed":
             frappe.throw(_("Billing Event can only be created for Confirmed Sales Agreements. Current status: {0}").format(agreement.status))
             
-        # Set company and currency if not set
-        if not self.company:
-            self.company = agreement.company
+
+        unit = agreement.unit
+        agreement_company = None
+        if unit:
+            prop = frappe.db.get_value("RE Unit", unit, "property")
+            if prop:
+                phase = frappe.db.get_value("RE Property", prop, "phase")
+                if phase:
+                    project = frappe.db.get_value("RE Phase", phase, "project")
+                    if project:
+                        agreement_company = frappe.db.get_value("RE Project Profile", {"project": project}, "operating_company")
+        
+        if not self.company and agreement_company:
+            self.company = agreement_company
+        elif agreement_company and self.company != agreement_company:
+            frappe.throw(_("Company mismatch. Event company '{0}' does not match Project company '{1}'").format(self.company, agreement_company))
+
+            
         if not self.currency:
             self.currency = agreement.currency
-            
-        if self.currency != agreement.currency:
+        elif self.currency != agreement.currency:
             frappe.throw(_("Currency mismatch. Event currency '{0}' does not match Agreement currency '{1}'").format(self.currency, agreement.currency))
 
     def validate_schedule(self):
@@ -36,11 +50,11 @@ class REBillingEvent(Document):
         schedule = frappe.get_doc("RE Payment Schedule", self.payment_schedule)
         
         # Security: schedule must belong to agreement
-        if schedule.parent != self.sales_agreement:
+        if schedule.sales_agreement != self.sales_agreement:
             frappe.throw(_("Payment Schedule {0} does not belong to Sales Agreement {1}").format(self.payment_schedule, self.sales_agreement))
             
         # Amount must strictly come from authoritative source
-        self.billing_amount = schedule.amount
+        self.billing_amount = schedule.installment_amount
 
     def set_idempotency_key(self):
         if not self.sales_agreement or not self.payment_schedule or not self.trigger_type:

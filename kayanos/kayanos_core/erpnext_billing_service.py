@@ -40,10 +40,10 @@ def create_sales_invoice_from_billing_event(billing_event_name):
     if not event.payment_schedule:
         frappe.throw(_("Missing Payment Schedule reference."))
     schedule = frappe.get_doc("RE Payment Schedule", event.payment_schedule)
-    if schedule.parent != agreement.name:
+    if schedule.sales_agreement != agreement.name:
         frappe.throw(_("Payment Schedule {0} does not belong to Agreement {1}").format(schedule.name, agreement.name))
-    if schedule.amount <= 0:
-        frappe.throw(_("Cannot bill an installment with zero or negative amount ({0}).").format(schedule.amount))
+    if schedule.installment_amount <= 0:
+        frappe.throw(_("Cannot bill an installment with zero or negative amount ({0}).").format(schedule.installment_amount))
         
     # 5. Validate Customer (Using mapping from Phase 5B)
     if not event.customer or not frappe.db.exists("Customer", event.customer):

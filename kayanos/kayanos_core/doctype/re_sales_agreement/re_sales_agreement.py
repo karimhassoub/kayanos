@@ -10,9 +10,13 @@ class RESalesAgreement(Document):
     def validate(self):
         self.set_commercial_snapshot()
         self.ensure_customer_linked()
+        self.validate_company_isolation()
         self.validate_and_calculate_payment_plan()
         self.validate_state_transitions()
         
+    def validate_company_isolation(self):
+        pass
+
     def set_commercial_snapshot(self):
         self.unit_price = flt(self.unit_price)
         self.discount = flt(self.discount)
@@ -50,6 +54,7 @@ class RESalesAgreement(Document):
 
     @frappe.whitelist()
     def confirm_agreement(self):
+        self.check_permission("write")
         roles = frappe.get_roles(frappe.session.user)
         if "Sales Manager" not in roles and "System Manager" not in roles:
             raise frappe.PermissionError(_("Only Sales Manager or System Manager can confirm an Agreement."))
@@ -108,6 +113,7 @@ class RESalesAgreement(Document):
 
     @frappe.whitelist()
     def cancel_draft_agreement(self):
+        self.check_permission("write")
         roles = frappe.get_roles(frappe.session.user)
         if "Sales Manager" not in roles and "System Manager" not in roles:
             raise frappe.PermissionError(_("Only Sales Manager or System Manager can cancel an Agreement."))
@@ -117,42 +123,6 @@ class RESalesAgreement(Document):
             frappe.throw(_("Only Draft agreements can be cancelled using this method."))
             
         self.db_set("status", "Cancelled")
-
-    @frappe.whitelist()
-    def cancel_confirmed_agreement(self):
-        roles = frappe.get_roles(frappe.session.user)
-        if "Sales Manager" not in roles and "System Manager" not in roles:
-            raise frappe.PermissionError(_("Only Sales Manager or System Manager can cancel an Agreement."))
-
-            
-        frappe.db.get_value("RE Unit Reservation", self.reservation, "name", for_update=True)
-        frappe.db.get_value("RE Unit", self.unit, "name", for_update=True)
-        
-        self.reload()
-        if self.status != "Confirmed":
-            frappe.throw(_("Only Confirmed agreements can be cancelled using this method."))
-            
-        self.db_set("status", "Cancelled")
-        
-        other_confirmed = frappe.db.exists("RE Sales Agreement", {"unit": self.unit, "status": "Confirmed", "name": ("!=", self.name)})
-        other_reserved = frappe.db.exists("RE Unit Reservation", {"unit": self.unit, "status": "Active"})
-        
-        if not other_confirmed and not other_reserved:
-            unit = frappe.get_doc("RE Unit", self.unit)
-            phase_name = frappe.db.get_value("RE Property", unit.property, "phase")
-            project_name = frappe.db.get_value("RE Phase", phase_name, "project")
-            
-            phase_auth = frappe.db.get_value("RE Phase", phase_name, "sales_authorized")
-            proj_auth = frappe.db.get_value("RE Project Profile", {"project": project_name}, "sales_authorized")
-            
-            if phase_auth and proj_auth:
-                unit.availability_status = "Available"
-            else:
-                unit.availability_status = "Withheld"
-            unit.save(ignore_permissions=True)
-            
-        self.mark_crm_deal_lost()
-        self.cancel_payment_schedule()
         
     def generate_payment_schedule(self):
         if self.status != "Confirmed":

@@ -1,11 +1,5 @@
 import frappe
 def execute():
-    print('=== PROJECT FIELDS ===')
-    for df in frappe.get_meta('Project').fields:
-        if df.fieldtype in ('Link', 'Select', 'Data', 'Check'):
-            print(str(df.fieldname) + ' (' + str(df.fieldtype) + '): ' + str(df.options or ''))
-
-    print('\n=== CRM DEAL FIELDS ===')
-    for df in frappe.get_meta('CRM Deal').fields:
-        if df.fieldtype in ('Link', 'Select', 'Data', 'Check', 'Dynamic Link'):
-            print(str(df.fieldname) + ' (' + str(df.fieldtype) + '): ' + str(df.options or ''))
+    for term in ['%build%', '%estate%', '%zone%', '%phase%', '%asset%', '%item%']:
+        docs = frappe.get_all('DocType', filters={'name': ['like', term], 'custom': 0}, pluck='name')
+        print(f'Term {term}: {docs}')

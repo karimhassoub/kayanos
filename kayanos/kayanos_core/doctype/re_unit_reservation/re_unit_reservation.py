@@ -90,6 +90,13 @@ class REUnitReservation(Document):
         
         # 5. Update Unit Status
         frappe.db.set_value("RE Unit", self.unit, "availability_status", "Reserved")
+        
+        # 6. Queue Email Notification (Model A)
+        frappe.enqueue(
+            "kayanos.kayanos_core.notifications.send_reservation_confirmation",
+            reservation_name=self.name,
+            enqueue_after_commit=True
+        )
 
     def deactivate_reservation(self):
         # 1. Lock Unit

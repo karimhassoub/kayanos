@@ -1,0 +1,37 @@
+﻿diff --git a/kayanos/discovery.py b/kayanos/discovery.py
+index 8be38c7..e47219c 100644
+--- a/kayanos/discovery.py
++++ b/kayanos/discovery.py
+@@ -1,11 +1,5 @@
+ import frappe
+ def execute():
+-    print('=== PROJECT FIELDS ===')
+-    for df in frappe.get_meta('Project').fields:
+-        if df.fieldtype in ('Link', 'Select', 'Data', 'Check'):
+-            print(str(df.fieldname) + ' (' + str(df.fieldtype) + '): ' + str(df.options or ''))
+-
+-    print('\n=== CRM DEAL FIELDS ===')
+-    for df in frappe.get_meta('CRM Deal').fields:
+-        if df.fieldtype in ('Link', 'Select', 'Data', 'Check', 'Dynamic Link'):
+-            print(str(df.fieldname) + ' (' + str(df.fieldtype) + '): ' + str(df.options or ''))
++    for term in ['%build%', '%estate%', '%zone%', '%phase%', '%asset%', '%item%']:
++        docs = frappe.get_all('DocType', filters={'name': ['like', term], 'custom': 0}, pluck='name')
++        print(f'Term {term}: {docs}')
+diff --git a/kayanos/kayanos_core/doctype/re_unit_reservation/re_unit_reservation.py b/kayanos/kayanos_core/doctype/re_unit_reservation/re_unit_reservation.py
+index 4f65a14..c0e175d 100644
+--- a/kayanos/kayanos_core/doctype/re_unit_reservation/re_unit_reservation.py
++++ b/kayanos/kayanos_core/doctype/re_unit_reservation/re_unit_reservation.py
+@@ -90,6 +90,13 @@ class REUnitReservation(Document):
+         
+         # 5. Update Unit Status
+         frappe.db.set_value("RE Unit", self.unit, "availability_status", "Reserved")
++        
++        # 6. Queue Email Notification (Model A)
++        frappe.enqueue(
++            "kayanos.kayanos_core.notifications.send_reservation_confirmation",
++            reservation_name=self.name,
++            enqueue_after_commit=True
++        )
+ 
+     def deactivate_reservation(self):
+         # 1. Lock Unit

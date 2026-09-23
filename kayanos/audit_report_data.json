@@ -1,0 +1,234 @@
+[
+  {
+    "file": "audit_script.py",
+    "severity": "Critical",
+    "category": "Security",
+    "message": "Potential SQL injection: string formatting in frappe.db.sql",
+    "line": 29,
+    "fix_direction": "Use parameterized queries (%s) and pass variables as a tuple/dict."
+  },
+  {
+    "file": "audit_script.py",
+    "severity": "Critical",
+    "category": "Security",
+    "message": "Potential SQL injection: string formatting in frappe.db.sql",
+    "line": 30,
+    "fix_direction": "Use parameterized queries (%s) and pass variables as a tuple/dict."
+  },
+  {
+    "file": "audit_script.py",
+    "severity": "Medium",
+    "category": "Clean Code",
+    "message": "Hardcoded fallback date used",
+    "line": 31,
+    "fix_direction": "Remove hardcoded fallback and handle None/empty cases explicitly or log the fallback."
+  },
+  {
+    "file": "audit_script.py",
+    "severity": "Critical",
+    "category": "Architectural Contracts",
+    "message": "frappe.db.commit() called directly in code",
+    "line": 33,
+    "fix_direction": "Remove explicit commit; rely on frappe framework request lifecycle to handle commits."
+  },
+  {
+    "file": "audit_script.py",
+    "severity": "Critical",
+    "category": "Architectural Contracts",
+    "message": "frappe.db.commit() called directly in code",
+    "line": 34,
+    "fix_direction": "Remove explicit commit; rely on frappe framework request lifecycle to handle commits."
+  },
+  {
+    "file": "audit_script.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 35,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  },
+  {
+    "file": "audit_script.py",
+    "severity": "High",
+    "category": "Architectural Contracts",
+    "message": "Direct manipulation of Payment Entry from KayanOS",
+    "line": 38,
+    "fix_direction": "Use the ERPNext Bridge/Service layer to interact with financial doctypes."
+  },
+  {
+    "file": "fix_db.py",
+    "severity": "Critical",
+    "category": "Architectural Contracts",
+    "message": "frappe.db.commit() called directly in code",
+    "line": 8,
+    "fix_direction": "Remove explicit commit; rely on frappe framework request lifecycle to handle commits."
+  },
+  {
+    "file": "setup_phase4.py",
+    "severity": "Critical",
+    "category": "Architectural Contracts",
+    "message": "frappe.db.commit() called directly in code",
+    "line": 7,
+    "fix_direction": "Remove explicit commit; rely on frappe framework request lifecycle to handle commits."
+  },
+  {
+    "file": "kayanos_core\\billing_service.py",
+    "severity": "Critical",
+    "category": "Architectural Contracts",
+    "message": "frappe.db.commit() called directly in code",
+    "line": 79,
+    "fix_direction": "Remove explicit commit; rely on frappe framework request lifecycle to handle commits."
+  },
+  {
+    "file": "kayanos_core\\billing_service.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 48,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\erpnext_billing_cancellation_service.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 8,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\erpnext_billing_cancellation_service.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 85,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\erpnext_billing_cancellation_service.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 111,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\erpnext_billing_cancellation_service.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 159,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\erpnext_billing_service.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 8,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\erpnext_bridge.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 57,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  },
+  {
+    "file": "kayanos_core\\erpnext_bridge.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 107,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  },
+  {
+    "file": "kayanos_core\\erpnext_collection_service.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 117,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  },
+  {
+    "file": "kayanos_core\\financial_reconciliation.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 138,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  },
+  {
+    "file": "kayanos_core\\financial_reconciliation.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 164,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\doctype\\re_payment_plan_installment\\re_payment_plan_installment.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 44,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  },
+  {
+    "file": "kayanos_core\\doctype\\re_project_profile\\test_re_project_profile.py",
+    "severity": "Critical",
+    "category": "Security",
+    "message": "Potential SQL injection: string formatting in frappe.db.sql",
+    "line": 10,
+    "fix_direction": "Use parameterized queries (%s) and pass variables as a tuple/dict."
+  },
+  {
+    "file": "kayanos_core\\doctype\\re_sales_agreement\\re_sales_agreement.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 52,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\doctype\\re_sales_agreement\\re_sales_agreement.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 110,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\doctype\\re_sales_agreement\\re_sales_agreement.py",
+    "severity": "High",
+    "category": "Security",
+    "message": "Whitelisted function missing explicit frappe.has_permission() check",
+    "line": 122,
+    "fix_direction": "Add frappe.has_permission() check or role-based validation before returning data."
+  },
+  {
+    "file": "kayanos_core\\doctype\\re_unit_reservation\\re_unit_reservation.py",
+    "severity": "Critical",
+    "category": "Architectural Contracts",
+    "message": "frappe.db.commit() called directly in code",
+    "line": 128,
+    "fix_direction": "Remove explicit commit; rely on frappe framework request lifecycle to handle commits."
+  },
+  {
+    "file": "kayanos_core\\report\\re_customer_commercial_statement\\re_customer_commercial_statement.py",
+    "severity": "Medium",
+    "category": "Clean Code",
+    "message": "Hardcoded fallback date used",
+    "line": 133,
+    "fix_direction": "Remove hardcoded fallback and handle None/empty cases explicitly or log the fallback."
+  },
+  {
+    "file": "kayanos_core\\report\\re_customer_commercial_statement\\re_customer_commercial_statement.py",
+    "severity": "Low",
+    "category": "Business Logic",
+    "message": "Monetary calculation using flt() without explicit precision",
+    "line": 140,
+    "fix_direction": "Pass precision argument to flt() or use currency rounding functions."
+  }
+]

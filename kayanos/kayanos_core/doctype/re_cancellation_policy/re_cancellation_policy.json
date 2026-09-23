@@ -1,0 +1,133 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:policy_name",
+ "creation": "2026-09-24 01:46:39.526326",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "policy_name",
+  "cancel_future_installments",
+  "void_unpaid_invoices",
+  "refund_paid_amounts",
+  "cancellation_fee_percentage",
+  "cancellation_fee_amount",
+  "forfeit_reservation_amount",
+  "cancellation_fee_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "policy_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Policy Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "cancel_future_installments",
+   "fieldtype": "Check",
+   "label": "Cancel Future Installments"
+  },
+  {
+   "default": "1",
+   "fieldname": "void_unpaid_invoices",
+   "fieldtype": "Check",
+   "label": "Void Unpaid Invoices"
+  },
+  {
+   "default": "1",
+   "fieldname": "refund_paid_amounts",
+   "fieldtype": "Check",
+   "label": "Refund Paid Amounts"
+  },
+  {
+   "fieldname": "cancellation_fee_percentage",
+   "fieldtype": "Percent",
+   "label": "Cancellation Fee (%)"
+  },
+  {
+   "fieldname": "cancellation_fee_amount",
+   "fieldtype": "Currency",
+   "label": "Cancellation Fee (Fixed Amount)"
+  },
+  {
+   "default": "0",
+   "fieldname": "forfeit_reservation_amount",
+   "fieldtype": "Check",
+   "label": "Forfeit Reservation Amount"
+  },
+  {
+   "fieldname": "cancellation_fee_item",
+   "fieldtype": "Link",
+   "label": "Cancellation Fee Item",
+   "options": "Item"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-24 01:46:39.526326",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Cancellation Policy",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

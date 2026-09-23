@@ -1,0 +1,236 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-09-24 01:46:41.365940",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "section_core",
+  "sales_agreement",
+  "customer",
+  "project",
+  "cancellation_reason",
+  "cancellation_policy",
+  "section_calc",
+  "gross_paid_amount",
+  "gross_unpaid_invoiced_amount",
+  "calculated_cancellation_fee",
+  "calculated_reservation_forfeiture",
+  "total_approved_deductions",
+  "net_approved_refund",
+  "section_exec",
+  "execution_status",
+  "cancellation_fee_invoice_ref",
+  "refund_payment_entry_ref",
+  "amended_from",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "ACC-CANC-.YYYY.-"
+  },
+  {
+   "fieldname": "section_core",
+   "fieldtype": "Section Break",
+   "label": "Core References"
+  },
+  {
+   "fieldname": "sales_agreement",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Agreement",
+   "options": "RE Sales Agreement",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "sales_agreement.customer",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "sales_agreement.project",
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_reason",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Cancellation Reason",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cancellation_policy",
+   "fieldtype": "Link",
+   "label": "Applied Cancellation Policy",
+   "options": "RE Cancellation Policy",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_calc",
+   "fieldtype": "Section Break",
+   "label": "Calculation Snapshot"
+  },
+  {
+   "fieldname": "gross_paid_amount",
+   "fieldtype": "Currency",
+   "label": "Gross Paid Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gross_unpaid_invoiced_amount",
+   "fieldtype": "Currency",
+   "label": "Gross Unpaid Invoiced Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculated_cancellation_fee",
+   "fieldtype": "Currency",
+   "label": "Calculated Cancellation Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculated_reservation_forfeiture",
+   "fieldtype": "Currency",
+   "label": "Reservation Forfeiture",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_approved_deductions",
+   "fieldtype": "Currency",
+   "label": "Total Approved Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "net_approved_refund",
+   "fieldtype": "Currency",
+   "label": "Net Approved Refund",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_exec",
+   "fieldtype": "Section Break",
+   "label": "Financial Execution"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "execution_status",
+   "fieldtype": "Select",
+   "label": "Execution Status",
+   "options": "Pending\nPartially Executed\nReconciled\nCompleted\nFailed\nFinance Exception",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_fee_invoice_ref",
+   "fieldtype": "Link",
+   "label": "Fee Invoice Ref",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "refund_payment_entry_ref",
+   "fieldtype": "Link",
+   "label": "Refund Payment Entry Ref",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "RE Agreement Cancellation",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPending Commercial Approval\nPending Financial Execution\nCompleted\nRejected",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-24 01:46:58.447754",
+ "modified_by": "Administrator",
+ "module": "KayanOS Core",
+ "name": "RE Agreement Cancellation",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Real Estate Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
